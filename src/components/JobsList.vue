@@ -3,21 +3,26 @@
     <p>Ordered by : {{ order }}</p>
     <transition-group name="list" tag="ul">
       <li v-for="job in orderedJobs" :key="job.id">
-        {{ job.title }}
+        <div class="card">
+          <div class="header">
+            <h4>{{ job.title }}</h4>
+            <div class="delete" @click="$emit('handleDelete', job.id)">X</div>
+          </div>
 
-        <div class="salary">
-          <p>{{ job.salary }} rupees</p>
-        </div>
-        <div class="description">
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem omnis
-            voluptatum eius doloremque optio iusto sequi dignissimos. Pariatur
-            earum assumenda dolores possimus quidem quam, reprehenderit aliquid
-            consequuntur amet non facere.
-          </p>
+          <div class="salary">
+            <p>{{ job.salary }} rupees</p>
+          </div>
+          <div class="description">
+            <p>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem
+              omnis voluptatum eius doloremque optio iusto sequi dignissimos.
+              Pariatur earum assumenda dolores possimus quidem quam,
+              reprehenderit aliquid consequuntur amet non facere.
+            </p>
+          </div>
         </div>
       </li>
-    </transition-group >
+    </transition-group>
   </div>
 </template>
 
@@ -39,12 +44,11 @@ export default defineComponent({
   },
   setup(props) {
     const orderedJobs = computed(() => {
-
-     return [...props.jobs].sort((a:Job,b:Job)=>{
-         return a[props.order] > b[props.order] ? 1 : -1
-     })
+      return [...props.jobs].sort((a: Job, b: Job) => {
+        return a[props.order] > b[props.order] ? 1 : -1;
+      });
     });
-    return { orderedJobs}
+    return { orderedJobs };
   },
 });
 </script>
@@ -64,6 +68,17 @@ export default defineComponent({
   margin: 16px 0;
   border-radius: 4px;
 }
+.header {
+  display: flex;
+  align-items: center;
+}
+.header h4 {
+  flex: 2;
+}
+.delete {
+  color: red;
+  cursor: pointer;
+}
 .job-list h2 {
   margin: 0 0 10px;
   text-transform: capitalize;
@@ -79,7 +94,7 @@ export default defineComponent({
   font-weight: bold;
   margin: 10px 4px;
 }
-.list-move{
-    transition: all 1s;
+.list-move {
+  transition: all 1s;
 }
 </style>

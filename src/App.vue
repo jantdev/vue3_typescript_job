@@ -6,9 +6,11 @@
         <button @click="handleClick('title')">Title</button>
         <button @click="handleClick('salary')">Salary</button>
         <button @click="handleClick('location')">Location</button>
+  
       </div>
     </header>
-    <JobsList :jobs="jobs" :order="order" />
+    <JobAdd @addjob="handleAddJob"/>
+    <JobsList :jobs="jobs" :order="order" @handleDelete="handleTheDelete"/>
   </div>
 </template>
 
@@ -16,12 +18,14 @@
 import { defineComponent, ref } from "vue";
 import Job from "@/types/Job";
 import JobsList from "./components/JobsList.vue";
+import JobAdd from "./components/JobAdd.vue"
 import OrderBy from "@/types/orderby";
 
 export default defineComponent({
   name: "App",
   components: {
     JobsList,
+    JobAdd
   },
   setup() {
     const jobs = ref<Job[]>([
@@ -55,9 +59,33 @@ export default defineComponent({
     const order = ref<OrderBy>("title");
     const handleClick = (term: OrderBy) => {
       order.value = term;
-    };
 
-    return { jobs, handleClick, order };
+    };
+  
+    const handleTheDelete = (jobid:string):void =>{
+      
+        const newJobs = jobs.value.filter((job)=>{
+          return job.id !== jobid
+        })
+        if(newJobs.length){
+          jobs.value = newJobs
+        }
+    }
+
+    const handleAddJob = (newjob:Job):void =>{
+     
+      const check = jobs.value.find((job)=>{
+        return job.id === newjob.id
+      })
+      if(!check){
+      jobs.value.push(newjob)
+      }
+     
+    }
+
+    
+
+    return { jobs, handleClick, order, handleTheDelete,handleAddJob};
   },
 });
 </script>
